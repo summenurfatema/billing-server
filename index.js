@@ -21,7 +21,7 @@ async function run() {
     try {
         const billingCollection = client.db('billing').collection('billCollection')
 
-        app.post('/api/add-billing', async (req, res) => {
+        app.post('/add-billing', async (req, res) => {
             const billingBody = req.body
             if (!billingBody) {
                 res.status(400).send({ error: 'Please insert correct information' });
@@ -34,11 +34,18 @@ async function run() {
 
         })
 
-        app.get('/api/billing-list', async (req, res) => {
+        app.get('/billing-list', async (req, res) => {
             const query = {}
             const result = await billingCollection.find(query).toArray()
             res.send(result)
         })
+        app.delete('/delete-billing/:id', async (req, res) => {
+            const id = req.params.id
+            const query = { _id: ObjectId(id) }
+            const result = await billingCollection.deleteOne(query)
+            res.send(result)
+        })
+
 
     }
     finally {
